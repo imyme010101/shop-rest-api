@@ -97,5 +97,5 @@ CREATE INTO orders {
 }
 
 INSERT INTO orders (member_id,price,order_memo,addressee,address,number) VALUES('test',25000,'test','test','test','test', 'CANCEL');
-INSERT INTO orders (member_id,price,order_memo,addressee,address,number) VALUES('admin',24000,'admin','admin','admin','admin','REORDER');
+INSERT INTO orders (member_id,price,order_memo,addressee,address,number) VALUES('test',24000,'test','test','test','test','REORDER');
 
