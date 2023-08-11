@@ -78,7 +78,7 @@ CREATE TABLE product_items {
 
 INSERT INTO product_items (parent_idx,title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('1','청바지','','','스키니 청바지','{"제조사": "리바이스"}',25000,1000,0);
 INSERT INTO product_items (parent_idx,title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('11','','데미지','데미지1','스키니 청바지 데미지1','',26000,0,0);
-INSERT INTO product_items (parent_idx,title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('211','','데미지 모양','데미지 모양1','스키니 청바지 데미지 모양1','',26000,0,0);
+INSERT INTO product_items (parent_idx,title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('111','','데미지 모양','데미지 모양1','스키니 청바지 데미지 모양1','',26000,0,0);
 
 /* 부분 취소인 경우  CANCEL 처리후 다시 REORDER 아세 취소면 CANCEL INSERT */
 CREATE INTO orders {
