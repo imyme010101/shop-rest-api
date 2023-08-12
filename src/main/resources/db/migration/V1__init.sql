@@ -55,35 +55,43 @@ INSERT INTO coupons (title,content,discount_rate,discount_price,start_date,end_d
 INSERT INTO coupons (title,content,discount_rate,discount_price,start_date,end_date,status) VALUES('할인쿠폰 가격','할인쿠폰',0,1000,'2019-01-01 00:00:00','2019-01-01 00:00:00','ENABLE');
 
 /*
-모양, 색상 옵션인 경우 option_name, option_title 입력
-price는 최초 부모의 값+옵셥값 섹렉트시 노출 영력을 위해 따로 계산후 AS option_price
-WHERE 절 에서 substr 최초의 부모 join
 */
-CREATE TABLE product_items {
+CREATE TABLE products {
     idx int(11) PRIMARY KEY AUTO_INCREMENT,
-    parent_idx varchar(10) not null,
     title varchar(100) null,
-    option_name varchar(100) null,
-    option_title varchar(100) null,
     content text null,
     info text null,
-    price int(11) null DEFAULT 0,
+    status ENUM('ENABLE','DISABLE') not null DEFAULT 'ENABLE',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (idx) USING BTREE
+}
+
+INSERT INTO products (title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('청바지','','','스키니 청바지','{"제조사": "리바이스"}',25000,1000,0);
+
+CREATE TABLE product_options {
+    idx int(11) PRIMARY KEY AUTO_INCREMENT,
+    parent_idx int(11) not null comment '상품 idx',
+    depth_type char(1) not null comment '0:옵션이 없을때, 1: 개별 옵션, 2: 존재하는 옵션 전체 선택',
+    depth varchar(15) not null DEFAULT '000000000000000' comment '오른쪽 부터 3자리씩 1 뎁스 시작 기본 5뎁스 까지 허용',
+    name varchar(100) null DEFAULT '상품' comment '옵션이 아닌경우 상품 옵션은 color, size 등',
+    title varchar(100) null DEFAULT '상품' comment '옵션이 아닌경우 상품 옵션은 노랑, 280cm 등',
+    price int(11) null DEFAULT 0 DEFAULT 0 comment '상품인 경우 가격 옵션인 경우 0~ 옵션 가격',
     discount_rate int(11) not null DEFAULT 0,
     discount_price int(11) not null DEFAULT 0,
+    stock int(11) not null DEFAULT 0,
     status ENUM('ENABLE','DISABLE') not null DEFAULT 'ENABLE',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (idx) USING BTREE
     INDEX parent_idx (parent_idx)
 }
 
-INSERT INTO product_items (parent_idx,title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('1','청바지','','','스키니 청바지','{"제조사": "리바이스"}',25000,1000,0);
-INSERT INTO product_items (parent_idx,title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('11','','데미지','데미지1','스키니 청바지 데미지1','',26000,0,0);
-INSERT INTO product_items (parent_idx,title,option_name,option_title,content,info,price,discount_rate,discount_price) VALUES('111','','데미지 모양','데미지 모양1','스키니 청바지 데미지 모양1','',26000,0,0);
+INSERT INTO products_option (parent_idx,name,title,price,discount_rate,discount_price,stock) VALUES(1,'color','color',0,0,0,0);
 
 /* 부분 취소인 경우  CANCEL 처리후 다시 REORDER 아세 취소면 CANCEL INSERT */
 CREATE INTO orders {
     idx int(11) PRIMARY KEY AUTO_INCREMENT,
     member_id char(12) not null,
+    products_idx int(11) not null,
     price int(11) not null,
     order_memo varchar(255) null,
     addressee varchar(20) not null,
