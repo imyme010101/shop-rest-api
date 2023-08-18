@@ -18,6 +18,8 @@ import com.imyme010101.restapi.DTO.member.LoginDTO;
 import com.imyme010101.restapi.service.security.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "회원 관리", description = "로그인/회원가입/로그아웃")
@@ -37,7 +39,7 @@ public class MemberController {
     public ResponseEntity<ResultDTO> login(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
         ResultDTO responseDTO;
         HashMap<String, String> errors = new HashMap<>();
-        
+
         if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(error -> {
                 errors.put(error.getField(), error.getDefaultMessage());
@@ -50,18 +52,25 @@ public class MemberController {
             String memberId = loginDTO.id;
             String password = loginDTO.password;
 
-            TokenDTO tokenDTO = memberService.login(memberId, password);
+            try {
+                TokenDTO tokenDTO = memberService.login(memberId, password);
 
-            if(tokenDTO.accessToken != null) {
-                this.code = "SUCCESS";
-                this.message = "정상적으로 처리 되었습니다.";
-                this.data = tokenDTO;
-            } else {
-
-                this.code = "SUCCESS";
-                this.message = "회원 정보가 존재 않합니다.";
+                if (tokenDTO.accessToken != null) {
+                    this.code = "SUCCESS";
+                    this.message = "정상적으로 처리 되었습니다.";
+                    this.data = tokenDTO;
+                } else {
+                    this.code = "FAIL";
+                    this.message = "회원 정보가 존재 않습니다.";
+                    this.data = null;
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                this.code = "FAIL";
+                this.message = e.getMessage();
                 this.data = null;
             }
+
         }
 
         responseDTO = ResultDTO.builder()

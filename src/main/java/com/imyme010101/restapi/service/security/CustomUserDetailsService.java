@@ -26,9 +26,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         MemberDTO member = memberRepository.findById(username);
         if (member != null) {
             return createUserDetails(member);
+        } else {
+            throw new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다.");
         }
-        
-        return null;
     }
 
     // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 리턴
