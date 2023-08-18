@@ -38,9 +38,10 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<ResultDTO> login(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
         ResultDTO responseDTO;
-        HashMap<String, String> errors = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
+            HashMap<String, String> errors = new HashMap<>();
+
             bindingResult.getFieldErrors().forEach(error -> {
                 errors.put(error.getField(), error.getDefaultMessage());
             });
