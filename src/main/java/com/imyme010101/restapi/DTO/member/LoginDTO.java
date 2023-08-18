@@ -11,7 +11,7 @@ public class LoginDTO {
   public String id;
 
   @NotEmpty
-  @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$") // 영문, 특수문자 8자 이상 20자 이하
+  @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$")
   @Schema(description = "영문, 특수문자 8자 이상 20자 이하", defaultValue = "abcd12#$12#$")
   public String password;
 }

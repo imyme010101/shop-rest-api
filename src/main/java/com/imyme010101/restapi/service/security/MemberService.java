@@ -39,6 +39,15 @@ public class MemberService {
     return tokenDTO;
   }
 
+  @Transactional
+  public boolean signup(MemberDTO memberDTO) throws Exception {
+    if(memberRepository.add(memberDTO) == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   public MemberDTO info(String memberId) {
     return memberRepository.findById(memberId);
   }

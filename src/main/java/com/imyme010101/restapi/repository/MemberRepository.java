@@ -8,5 +8,6 @@ import com.imyme010101.restapi.DTO.member.MemberDTO;
 @Repository
 @Mapper
 public interface MemberRepository {
+  public int add(MemberDTO memberDTO);
   public MemberDTO findById(String username);
 }

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.imyme010101.restapi.repository.MemberRepository">
+	<insert id="add" parameterType="MemberDTO">
+		INSERT INTO members (id, password, roles, name, date_of_birth, phone_number, email, zip_code, address, gender, status)
+		VALUES (#{id}, #{password}, #{roles}, #{name}, #{dateOfBirth}, #{phoneNumber}, #{email}, #{zipCode}, #{address}, #{gender}, #{status})
+	</insert>
+
 	<select id="findById" resultType="MemberDTO">
 		SELECT * FROM member WHERE id=#{username}
 	</select>
