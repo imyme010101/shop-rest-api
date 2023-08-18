@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
-public class MembersDTO {
+public class MemberDTO {
   public String id;
   public String password;
   public String roles;
@@ -20,10 +20,10 @@ public class MembersDTO {
   public LocalDateTime createdAt;
 
   public enum Gender {
-    M, F
+    MALE, FEMALE
   }
 
   public enum Status {
-    Y, N
+    ENABLE, DISABLE
   }
 }

@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.imyme010101.restapi.DTO.TokenDTO;
-import com.imyme010101.restapi.DTO.member.MembersDTO;
+import com.imyme010101.restapi.DTO.member.MemberDTO;
 import com.imyme010101.restapi.jwt.JwtTokenProvider;
-import com.imyme010101.restapi.repository.MembersRepository;
-import com.imyme010101.restapi.util.SecurityUtil;
+import com.imyme010101.restapi.repository.MemberRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +20,7 @@ public class MemberService {
   @Autowired
   private JwtTokenProvider jwtTokenProvider;
   @Autowired
-  private MembersRepository membersRepository;
+  private MemberRepository memberRepository;
 
   @Transactional
   public TokenDTO login(String memberId, String password) {
@@ -40,7 +39,7 @@ public class MemberService {
     return tokenDTO;
   }
 
-  public MembersDTO info(String memberId) {
-    return membersRepository.findById(memberId);
+  public MemberDTO info(String memberId) {
+    return memberRepository.findById(memberId);
   }
 }
