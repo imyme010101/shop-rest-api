@@ -6,7 +6,7 @@
 		VALUES (#{id}, #{password}, #{roles}, #{name}, #{dateOfBirth}, #{phoneNumber}, #{email}, #{zipCode}, #{address}, #{gender}, #{status})
 	</insert>
 
-	<select id="findAll" parameterType="MemberDTO">
-		SELECT * FROM KH.member WHERE ${key} = #{val}
+	<select id="findAll" resultType="MemberDTO">
+		SELECT * FROM member WHERE ${key} = #{val}
 	</select>	
 </mapper>

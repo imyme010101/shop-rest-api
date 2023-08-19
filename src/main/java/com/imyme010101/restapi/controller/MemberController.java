@@ -19,6 +19,7 @@ import com.imyme010101.restapi.service.security.MemberService;
 import com.imyme010101.restapi.util.EncryptionUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "회원 관리", description = "로그인/회원가입/로그아웃")
@@ -110,4 +111,9 @@ public class MemberController {
         .data(this.data)
         .build());
   }
+
+  //   @Operation(summary = "로그인 토큰 발급", description = "모든 API 호출을 하기 위해서 토큰은 발급")
+  // @PostMapping("/signin")
+  // public ResponseEntity<ResultDTO> signin(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
+  // }
 }
