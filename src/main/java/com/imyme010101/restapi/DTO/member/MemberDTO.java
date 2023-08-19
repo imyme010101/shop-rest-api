@@ -21,7 +21,7 @@ public class MemberDTO {
   public String password;
 
   @NotEmpty
-  @Schema(description = "role 테이블 참조", defaultValue = "일반 사용자 : U")
+  @Schema(description = "role 테이블 참조", defaultValue = "U")
   public String roles;
 
   @NotEmpty

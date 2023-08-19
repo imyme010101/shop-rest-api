@@ -16,6 +16,7 @@ import com.imyme010101.restapi.DTO.TokenDTO;
 import com.imyme010101.restapi.DTO.member.LoginDTO;
 import com.imyme010101.restapi.DTO.member.MemberDTO;
 import com.imyme010101.restapi.service.security.MemberService;
+import com.imyme010101.restapi.util.EncryptionUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,6 +48,8 @@ public class MemberController {
       this.data = errors;
     } else {
       try {
+        memberDTO.password = EncryptionUtil.encrypt(memberDTO.password);
+        
         memberService.signup(memberDTO);
         this.code = "SUCCESS";
         this.message = "정상적으로 처리 되었습니다.";
@@ -66,8 +69,8 @@ public class MemberController {
   }
 
   @Operation(summary = "로그인 토큰 발급", description = "모든 API 호출을 하기 위해서 토큰은 발급")
-  @PostMapping("/auth")
-  public ResponseEntity<ResultDTO> auth(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
+  @PostMapping("/signin")
+  public ResponseEntity<ResultDTO> signin(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       HashMap<String, String> errors = new HashMap<>();
 
@@ -79,11 +82,11 @@ public class MemberController {
       this.message = "입력값이 틀렸습니다.";
       this.data = errors;
     } else {
-      String memberId = loginDTO.id;
-      String password = loginDTO.password;
-
       try {
-        TokenDTO tokenDTO = memberService.login(memberId, password);
+        String memberId = loginDTO.id;
+        String password = EncryptionUtil.encrypt(loginDTO.password);
+        
+        TokenDTO tokenDTO = memberService.signin(memberId, password);
 
         if (tokenDTO.accessToken != null) {
           this.code = "SUCCESS";

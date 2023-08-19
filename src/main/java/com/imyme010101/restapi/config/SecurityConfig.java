@@ -33,8 +33,8 @@ public class SecurityConfig {
 				)
 				.authorizeHttpRequests(
 					authorize -> authorize
-						.requestMatchers("/member/login").permitAll() // 로그인 api
-						.requestMatchers("/api/signup").permitAll() // 회원가입 api
+						.requestMatchers("/member/signin").permitAll() // 로그인 api
+						.requestMatchers("/member/signup").permitAll() // 회원가입 api
 						.requestMatchers("/favicon.ico").permitAll()
 						.requestMatchers(
 							"/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/index.html", "/swagger-ui/**", "/swagger/**",   // swagger

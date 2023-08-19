@@ -23,7 +23,7 @@ public class MemberService {
   private MemberRepository memberRepository;
 
   @Transactional
-  public TokenDTO login(String memberId, String password) {
+  public TokenDTO signin(String memberId, String password) {
     // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
     // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);

@@ -1,7 +1,7 @@
 CREATE TABLE member (
     id char(12) not null, 
     password varchar(100) not null,
-    roles varchar(9) not null,
+    roles varchar(9) not null DEFAULT 'U' comment 'U:유저, C:카페, A:관리자 role 테이블 참죠',
     name char(20) not null,
     date_of_birth date null, 
     phone_number varchar(13) null, 
@@ -16,7 +16,7 @@ CREATE TABLE member (
     UNIQUE KEY(phone_number)
 );
 
-INSERT INTO member (id,password,name,date_of_birth,phone_number,email,zip_code,address,gender) VALUES('test','test','test','1990-01-01','010-0000-0000','test','test','test','MALE');
+INSERT INTO member (id,password,roles,name,date_of_birth,phone_number,email,zip_code,address,gender,status) VALUES('test','test','U','test','0000-00-00','00000000000','test','000000','test','MALE','ENABLE');
 
 CREATE TABLE role (
     role char(1) not null,
