@@ -49,6 +49,6 @@ public class MemberService {
   }
 
   public MemberDTO info(String memberId) {
-    return memberRepository.findById(memberId);
+    return memberRepository.findAll("id", memberId);
   }
 }

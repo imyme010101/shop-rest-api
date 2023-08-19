@@ -21,7 +21,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        MemberDTO member = memberRepository.findById(username);
+        MemberDTO member = memberRepository.findAll("id", username);
+
         if (member != null) {
             return createUserDetails(member);
         } else {
