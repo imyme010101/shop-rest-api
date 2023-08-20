@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +36,7 @@ public class GlobalExceptionHandler {
 
   /**
    * [Exception] API 호출 시 '객체' 혹은 '파라미터' 데이터 값이 유효하지 않은 경우
+   * 
    * @Valid 유효성 체크
    *
    * @param ex MethodArgumentNotValidException
@@ -56,6 +58,7 @@ public class GlobalExceptionHandler {
 
   /**
    * [Exception] API 호출 시 '객체' 혹은 '파라미터' 데이터 패턴이 유효하지 않은 경우
+   * 
    * @Validated 유효성 체크
    * 
    * @param ex ConstraintViolationException 객체
@@ -175,6 +178,7 @@ public class GlobalExceptionHandler {
     final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
     return new ResponseEntity<>(response, HTTP_STATUS_OK);
   }
+
 
   // ==================================================================================================================
 

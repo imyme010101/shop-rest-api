@@ -6,7 +6,7 @@
 		VALUES (#{id}, #{password}, #{roles}, #{name}, #{dateOfBirth}, #{phoneNumber}, #{email}, #{zipCode}, #{address}, #{gender}, #{status})
 	</insert>
 
-	<select id="findAll" resultType="MemberDTO">
+	<select id="findAll" parameterType="hashMap" resultType="MemberDTO">
 		SELECT * FROM member WHERE ${key} = #{val}
 	</select>	
 

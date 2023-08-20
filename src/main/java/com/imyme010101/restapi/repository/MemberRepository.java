@@ -3,6 +3,7 @@ package com.imyme010101.restapi.repository;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.imyme010101.restapi.DTO.member.MemberDTO;
@@ -11,5 +12,5 @@ import com.imyme010101.restapi.DTO.member.MemberDTO;
 @Mapper
 public interface MemberRepository {
   public int add(MemberDTO memberDTO);
-  public MemberDTO findAll(String key, String val);
+  public MemberDTO findAll(@Param("key") String key, @Param("val") String val);
 }
