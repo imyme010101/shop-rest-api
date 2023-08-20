@@ -10,7 +10,7 @@
 		SELECT * FROM member WHERE ${key} = #{val}
 	</select>	
 
-	<select id="findOne" resultType="map">
+	<select id="findOne" parameterType="hashMap">
 		SELECT ${key} FROM member WHERE ${key} = #{val}
 	</select>	
 </mapper>

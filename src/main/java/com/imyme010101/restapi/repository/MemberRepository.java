@@ -13,4 +13,5 @@ import com.imyme010101.restapi.DTO.member.MemberDTO;
 public interface MemberRepository {
   public int add(MemberDTO memberDTO);
   public MemberDTO findAll(@Param("key") String key, @Param("val") String val);
+  public String findOne(@Param("key") String key, @Param("val") String val);
 }

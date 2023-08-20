@@ -48,6 +48,10 @@ public class MemberService {
     }
   }
 
+  public String check(String key, String val) {
+    return memberRepository.findOne(key, val);
+  }
+
   public MemberDTO info(String memberId) {
     return memberRepository.findAll("id", memberId);
   }
