@@ -2,7 +2,7 @@ package com.imyme010101.restapi.config.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.JsonParseException;
-import com.imyme010101.restapi.DTO.ResultDTO;
+import com.imyme010101.restapi.common.response.ApiResponse;
 import com.imyme010101.restapi.common.code.ErrorCode;
 import com.imyme010101.restapi.common.response.ErrorResponse;
 
