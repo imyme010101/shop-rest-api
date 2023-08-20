@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
 
   /**
    * [Exception] API 호출 시 '객체' 혹은 '파라미터' 데이터 값이 유효하지 않은 경우
+   * @Valid 유효성 체크
    *
    * @param ex MethodArgumentNotValidException
    * @return ResponseEntity<ErrorResponse>
@@ -50,6 +51,22 @@ public class GlobalExceptionHandler {
       stringBuilder.append(", ");
     }
     final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_VALID_ERROR, String.valueOf(stringBuilder));
+    return new ResponseEntity<>(response, HTTP_STATUS_OK);
+  }
+
+  /**
+   * [Exception] API 호출 시 '객체' 혹은 '파라미터' 데이터 패턴이 유효하지 않은 경우
+   * @Validated 유효성 체크
+   * 
+   * @param ex ConstraintViolationException 객체
+   * @return ResponseEntity<ErrorResponse>
+   */
+  @ExceptionHandler(ConstraintViolationException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
+    log.error("handleConstraintViolationException", ex);
+
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_VALID_ERROR, ex.getMessage());
     return new ResponseEntity<>(response, HTTP_STATUS_OK);
   }
 

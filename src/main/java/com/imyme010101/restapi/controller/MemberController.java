@@ -33,6 +33,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 
 @Tag(name = "회원 관리", description = "로그인/회원가입/로그아웃")
+@Validated
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -45,7 +46,7 @@ public class MemberController {
 
   @Operation(summary = "회원 가입", description = "member 테이블 추가, 회원가입")
   @PostMapping("/signup")
-  public ResponseEntity<ResultDTO> signup(@ParameterObject @Validated MemberDTO memberDTO) {
+  public ResponseEntity<ResultDTO> signup(@ParameterObject @Valid MemberDTO memberDTO) {
     try {
       memberDTO.setPassword(EncryptionUtil.encrypt(memberDTO.getPassword()));
 
@@ -93,7 +94,7 @@ public class MemberController {
 
   @Operation(summary = "아이디 중복 체크")
   @GetMapping("/check/id")
-  public ResponseEntity<ResultDTO> checkId(@RequestParam("id") @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id) {
+  public ResponseEntity<ResultDTO> checkId(@RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id) {
     return null;
   }
 }
