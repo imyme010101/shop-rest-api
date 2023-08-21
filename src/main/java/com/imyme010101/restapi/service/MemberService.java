@@ -13,7 +13,7 @@ public class MemberService {
   private MemberRepository memberRepository;
   
   @Transactional
-  public boolean signup(MemberDTO memberDTO) throws Exception {
+  public boolean add(MemberDTO memberDTO) throws Exception {
     if (memberRepository.add(memberDTO) == 0) {
       return false;
     } else {
@@ -28,8 +28,8 @@ public class MemberService {
    * @param  val
    * @return      아이디
    */
-  public String check(String key, String val) {
-    return memberRepository.findOne(key, val);
+  public boolean check(String key, String val) {
+    return memberRepository.findOne(key, val) != null;
   }
 
   public MemberDTO get(String memberId) {

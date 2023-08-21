@@ -39,15 +39,19 @@ public class MemberController {
   private MemberService memberService;
 
   @Operation(summary = "회원 가입", description = "member 테이블 추가, 회원가입")
-  @PutMapping("/signup")
+  @PutMapping("/register")
   public ResponseEntity<ApiResponse> signup(@ParameterObject @Valid MemberDTO memberDTO) throws Exception {
-
     memberDTO.setPassword(EncryptionUtil.encrypt(memberDTO.getPassword()));
 
-    jwtMemberService.signup(memberDTO);
-    this.status = 200;
-    this.message = "정상적으로 처리 되었습니다.";
-    this.data = memberDTO;
+    if(memberService.add(memberDTO)) {
+      this.status = 200;
+      this.message = "정상적으로 처리 되었습니다.";
+      this.data = memberDTO;
+    } else {
+      this.status = 201;
+      this.message = "비정상적으로 처리 되었습니다.";
+      this.data = memberDTO;
+    }
 
     return ResponseEntity.badRequest().body(ApiResponse.builder()
         .status(this.status)
@@ -61,24 +65,18 @@ public class MemberController {
   public ResponseEntity<ApiResponse> auth(@ParameterObject @Valid LoginDTO loginDTO) throws Exception {
     TokenDTO tokenDTO = jwtMemberService.auth(loginDTO.getId(), EncryptionUtil.encrypt(loginDTO.getPassword()));
 
-    this.status = 200;
-    this.message = "정상적으로 처리 되었습니다.";
-    this.data = tokenDTO;
-
     return ResponseEntity.badRequest().body(ApiResponse.builder()
-        .status(this.status)
-        .resultMsg(this.message)
-        .result(this.data)
+        .status(200)
+        .resultMsg("정상적으로 처리 되었습니다.")
+        .result(tokenDTO)
         .build());
   }
 
   @Operation(summary = "아이디 중복 체크")
   @GetMapping("/check/id")
-  public ResponseEntity<ApiResponse> checkId(
-      @RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id) {
-    String chk = memberService.check("id", id);
+  public ResponseEntity<ApiResponse> checkId(@RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id) {
 
-    if (chk == null) {
+    if (memberService.check("id", id)) {
       this.status = 200;
       this.message = "사용 하실수 있는 아이디 입니다.";
       this.data = null;
@@ -98,9 +96,7 @@ public class MemberController {
   @Operation(summary = "이메일 중복 체크")
   @GetMapping("/check/email")
   public ResponseEntity<ApiResponse> checkEmail(@RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) {
-    String chk = memberService.check("email", email);
-
-    if (chk == null) {
+    if (memberService.check("email", email)) {
       this.status = 200;
       this.message = "사용 하실수 있는 이메일 입니다.";
       this.data = null;
