@@ -19,6 +19,7 @@ import com.imyme010101.restapi.DTO.TokenDTO;
 import com.imyme010101.restapi.DTO.member.LoginDTO;
 import com.imyme010101.restapi.DTO.member.MemberDTO;
 import com.imyme010101.restapi.util.EncryptionUtil;
+import com.imyme010101.restapi.util.RedisUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,6 +43,8 @@ public class MemberController {
   private MemberService memberService;
   @Autowired
   private VerificationService verificationService;
+  @Autowired
+  private RedisUtil redisUtil;
 
   @Operation(summary = "회원 가입", description = "member 테이블 추가, 회원가입")
   @PutMapping("/register")
@@ -125,9 +128,10 @@ public class MemberController {
   public ResponseEntity<ApiResponse> verificationId(
       @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) throws Exception {
 
-    String code = verificationService.sendSimpleMessage(email);
-    log.info("인증코드 : " + code);
-
+    // String code = verificationService.sendSimpleMessage(email);
+    // log.info("인증코드 : " + code);
+    
+    redisUtil.set("boot_test_key", "001100", 30);
 
     return ResponseEntity.badRequest().body(ApiResponse.builder()
         .status(this.status)

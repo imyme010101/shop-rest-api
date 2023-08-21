@@ -11,7 +11,7 @@ import com.imyme010101.restapi.repository.MemberRepository;
 public class MemberService {
   @Autowired
   private MemberRepository memberRepository;
-  
+
   @Transactional
   public boolean add(MemberDTO memberDTO) throws Exception {
     if (memberRepository.add(memberDTO) == 0) {
