@@ -25,3 +25,13 @@ springdoc.swagger-ui.path: /
 springdoc.swagger-ui.disable-swagger-default-url: true
 springdoc.swagger-ui.display-request-duration: true
 springdoc.swagger-ui.operations-sorter: alpha
+
+spring.mail.host=smtp.naver.com
+spring.mail.port=465
+spring.mail.username=abcd@naver.com
+spring.mail.password=abcdef
+spring.mail.properties.debug=true
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.ssl.enable= true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.ssl.trust=smtp.naver.com

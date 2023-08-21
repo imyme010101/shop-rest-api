@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.imyme010101.restapi.common.response.ApiResponse;
 import com.imyme010101.restapi.config.jwt.JwtMemberService;
+import com.imyme010101.restapi.service.EmailService;
 import com.imyme010101.restapi.service.MemberService;
 import com.imyme010101.restapi.DTO.TokenDTO;
 import com.imyme010101.restapi.DTO.member.LoginDTO;
@@ -23,8 +24,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "회원 관리", description = "로그인/회원가입/로그아웃")
+@Slf4j
 @Validated
 @RestController
 @RequestMapping("/member")
@@ -37,13 +40,15 @@ public class MemberController {
   private JwtMemberService jwtMemberService;
   @Autowired
   private MemberService memberService;
+  @Autowired
+  private EmailService emailService;
 
   @Operation(summary = "회원 가입", description = "member 테이블 추가, 회원가입")
   @PutMapping("/register")
   public ResponseEntity<ApiResponse> signup(@ParameterObject @Valid MemberDTO memberDTO) throws Exception {
     memberDTO.setPassword(EncryptionUtil.encrypt(memberDTO.getPassword()));
 
-    if(memberService.add(memberDTO)) {
+    if (memberService.add(memberDTO)) {
       this.status = 200;
       this.message = "정상적으로 처리 되었습니다.";
       this.data = memberDTO;
@@ -61,7 +66,7 @@ public class MemberController {
   }
 
   @Operation(summary = "로그인 토큰 발급", description = "모든 API 호출을 하기 위해서 토큰은 발급")
-  @PostMapping("/auth")
+  @GetMapping("/auth")
   public ResponseEntity<ApiResponse> auth(@ParameterObject @Valid LoginDTO loginDTO) throws Exception {
     TokenDTO tokenDTO = jwtMemberService.auth(loginDTO.getId(), EncryptionUtil.encrypt(loginDTO.getPassword()));
 
@@ -74,7 +79,8 @@ public class MemberController {
 
   @Operation(summary = "아이디 중복 체크")
   @GetMapping("/check/id")
-  public ResponseEntity<ApiResponse> checkId(@RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id) {
+  public ResponseEntity<ApiResponse> checkId(
+      @RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id) {
 
     if (memberService.check("id", id)) {
       this.status = 200;
@@ -95,7 +101,8 @@ public class MemberController {
 
   @Operation(summary = "이메일 중복 체크")
   @GetMapping("/check/email")
-  public ResponseEntity<ApiResponse> checkEmail(@RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) {
+  public ResponseEntity<ApiResponse> checkEmail(
+      @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) {
     if (memberService.check("email", email)) {
       this.status = 200;
       this.message = "사용 하실수 있는 이메일 입니다.";
@@ -112,4 +119,38 @@ public class MemberController {
         .result(this.data)
         .build());
   }
+
+  @Operation(summary = "패스워드 분실 인증 토큰 생성")
+  @GetMapping("/verification/id")
+  public ResponseEntity<ApiResponse> verificationId(
+      @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) throws Exception {
+
+    String code = emailService.sendSimpleMessage(email);
+    log.info("인증코드 : " + code);
+
+
+    return ResponseEntity.badRequest().body(ApiResponse.builder()
+        .status(this.status)
+        .resultMsg(this.message)
+        .result(this.data)
+        .build());
+  }
+
+  
+  // @Operation(summary = "패스워드 분실 인증 토큰 생성")
+  // @GetMapping("/verification/id")
+  // public ResponseEntity<ApiResponse> verificationId(
+  //     @RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id,
+  //     @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) throws Exception {
+
+  //   String code = emailService.sendSimpleMessage(email);
+  //   log.info("인증코드 : " + code);
+
+
+  //   return ResponseEntity.badRequest().body(ApiResponse.builder()
+  //       .status(this.status)
+  //       .resultMsg(this.message)
+  //       .result(this.data)
+  //       .build());
+  // }
 }
