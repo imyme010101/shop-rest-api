@@ -1,4 +1,4 @@
-package com.imyme010101.restapi.jwt;
+package com.imyme010101.restapi.config.jwt;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

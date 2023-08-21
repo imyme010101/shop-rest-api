@@ -1,4 +1,4 @@
-package com.imyme010101.restapi.jwt;
+package com.imyme010101.restapi.config.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

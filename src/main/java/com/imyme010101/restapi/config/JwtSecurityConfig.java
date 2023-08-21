@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import com.imyme010101.restapi.jwt.JwtFilter;
-import com.imyme010101.restapi.jwt.JwtTokenProvider;
-
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.imyme010101.restapi.config.jwt.JwtFilter;
+import com.imyme010101.restapi.config.jwt.JwtTokenProvider;
 
 public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
   @Autowired

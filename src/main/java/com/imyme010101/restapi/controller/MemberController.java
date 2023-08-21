@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.imyme010101.restapi.common.response.ApiResponse;
+import com.imyme010101.restapi.config.jwt.JwtMemberService;
+import com.imyme010101.restapi.service.MemberService;
 import com.imyme010101.restapi.DTO.TokenDTO;
 import com.imyme010101.restapi.DTO.member.LoginDTO;
 import com.imyme010101.restapi.DTO.member.MemberDTO;
-import com.imyme010101.restapi.service.security.MemberService;
 import com.imyme010101.restapi.util.EncryptionUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,8 @@ public class MemberController {
   private Object data = null;
 
   @Autowired
+  private JwtMemberService jwtMemberService;
+  @Autowired
   private MemberService memberService;
 
   @Operation(summary = "회원 가입", description = "member 테이블 추가, 회원가입")
@@ -41,7 +44,7 @@ public class MemberController {
 
     memberDTO.setPassword(EncryptionUtil.encrypt(memberDTO.getPassword()));
 
-    memberService.signup(memberDTO);
+    jwtMemberService.signup(memberDTO);
     this.status = 200;
     this.message = "정상적으로 처리 되었습니다.";
     this.data = memberDTO;
@@ -54,9 +57,9 @@ public class MemberController {
   }
 
   @Operation(summary = "로그인 토큰 발급", description = "모든 API 호출을 하기 위해서 토큰은 발급")
-  @PostMapping("/signin")
-  public ResponseEntity<ApiResponse> signin(@ParameterObject @Valid LoginDTO loginDTO) throws Exception {
-    TokenDTO tokenDTO = memberService.signin(loginDTO.getId(), EncryptionUtil.encrypt(loginDTO.getPassword()));
+  @PostMapping("/auth")
+  public ResponseEntity<ApiResponse> auth(@ParameterObject @Valid LoginDTO loginDTO) throws Exception {
+    TokenDTO tokenDTO = jwtMemberService.auth(loginDTO.getId(), EncryptionUtil.encrypt(loginDTO.getPassword()));
 
     this.status = 200;
     this.message = "정상적으로 처리 되었습니다.";
