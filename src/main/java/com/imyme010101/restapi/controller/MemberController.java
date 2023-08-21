@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.imyme010101.restapi.common.response.ApiResponse;
 import com.imyme010101.restapi.config.jwt.JwtMemberService;
-import com.imyme010101.restapi.service.EmailService;
+import com.imyme010101.restapi.service.VerificationService;
 import com.imyme010101.restapi.service.MemberService;
 import com.imyme010101.restapi.DTO.TokenDTO;
 import com.imyme010101.restapi.DTO.member.LoginDTO;
@@ -41,7 +41,7 @@ public class MemberController {
   @Autowired
   private MemberService memberService;
   @Autowired
-  private EmailService emailService;
+  private VerificationService verificationService;
 
   @Operation(summary = "회원 가입", description = "member 테이블 추가, 회원가입")
   @PutMapping("/register")
@@ -125,7 +125,7 @@ public class MemberController {
   public ResponseEntity<ApiResponse> verificationId(
       @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) throws Exception {
 
-    String code = emailService.sendSimpleMessage(email);
+    String code = verificationService.sendSimpleMessage(email);
     log.info("인증코드 : " + code);
 
 

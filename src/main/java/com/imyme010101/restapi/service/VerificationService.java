@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class EmailService {
+public class VerificationService {
     private final JavaMailSender javaMailSender;
 
     private final String ePw = createKey();
