@@ -32,7 +32,7 @@ public class MemberService {
     return memberRepository.findOne(key, val) != null;
   }
 
-  public MemberDTO get(String memberId) {
-    return memberRepository.findAll("id", memberId);
+  public MemberDTO get(String key, String val) {
+    return memberRepository.findAll(key, val);
   }
 }

@@ -1,5 +1,7 @@
 package com.imyme010101.restapi.controller;
 
+import java.util.Map;
+
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -124,14 +126,29 @@ public class MemberController {
   }
 
   @Operation(summary = "패스워드 분실 인증 토큰 생성")
-  @GetMapping("/verification/id")
-  public ResponseEntity<ApiResponse> verificationId(
-      @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) throws Exception {
-
-    // String code = verificationService.sendSimpleMessage(email);
-    // log.info("인증코드 : " + code);
+  @GetMapping("/verification/send/id")
+  public ResponseEntity<ApiResponse> verificationSendId(
+      @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email)
+      throws Exception {
     
-    redisUtil.set("boot_test_key", "001100", 30);
+    if(!memberService.check("email", email)) {
+      this.status = 201;
+      this.message = "가입된 이메일이 존재 하지 않습니다.";
+      this.data = null;
+    } else {
+      Long ttl = verificationService.sendMail(email);
+
+      if(ttl >= 0) {
+        this.status = 200;
+        this.message = "이메일이 정상적으로 발송되었습니다.";
+        this.data = null;
+      } else {
+        this.status = 201;
+        this.message = "이메일이 비정상적으로 발송되었습니다.";
+        this.data = null;
+      }
+    }
+
 
     return ResponseEntity.badRequest().body(ApiResponse.builder()
         .status(this.status)
@@ -140,21 +157,53 @@ public class MemberController {
         .build());
   }
 
-  
+  @Operation(summary = "")
+  @GetMapping("/verification/check")
+  public ResponseEntity<ApiResponse> verificationCheck(
+      @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email,
+      @RequestParam("code") @Valid @Pattern(regexp = "") int code) throws Exception {
+
+    Integer verifi = verificationService.check(email, code);
+    
+    if(verifi == 202) {
+      this.status = verifi;
+      this.message = "인증코드 유효 시간이 만료 되었습니다.";
+      this.data = null;
+    } else if(verifi == 201) {
+      this.status = verifi;
+      this.message = "인증코드 검증에 실패 했습니다.";
+      this.data = null;
+    } else if(verifi == 200) {
+      this.status = verifi;
+      this.message = "인증코드 검증에 성공 했습니다.";
+
+      MemberDTO memberDTO = memberService.get("email", email);
+      this.data = memberDTO.getId();
+    }
+
+    return ResponseEntity.badRequest().body(ApiResponse.builder()
+        .status(this.status)
+        .resultMsg(this.message)
+        .result(this.data)
+        .build());
+  }
+
   // @Operation(summary = "패스워드 분실 인증 토큰 생성")
   // @GetMapping("/verification/id")
   // public ResponseEntity<ApiResponse> verificationId(
-  //     @RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문 숫자 조합, 4자 이상") String id,
-  //     @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email) throws Exception {
+  // @RequestParam("id") @Valid @Pattern(regexp = "^[a-z0-9]{4,}$", message = "영문
+  // 숫자 조합, 4자 이상") String id,
+  // @RequestParam("email") @Valid @Pattern(regexp =
+  // "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message =
+  // "example@domain.com") String email) throws Exception {
 
-  //   String code = emailService.sendSimpleMessage(email);
-  //   log.info("인증코드 : " + code);
+  // String code = emailService.sendSimpleMessage(email);
+  // log.info("인증코드 : " + code);
 
-
-  //   return ResponseEntity.badRequest().body(ApiResponse.builder()
-  //       .status(this.status)
-  //       .resultMsg(this.message)
-  //       .result(this.data)
-  //       .build());
+  // return ResponseEntity.badRequest().body(ApiResponse.builder()
+  // .status(this.status)
+  // .resultMsg(this.message)
+  // .result(this.data)
+  // .build());
   // }
 }

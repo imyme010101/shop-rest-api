@@ -27,5 +27,9 @@ public class RedisUtil {
         return redisTemplate.delete(key);
     }
 
+    public Long ttl(String key) {
+        return redisTemplate.getExpire(key);
+    }
+
     public boolean hasKey(String key) { return redisTemplate.hasKey(key); }
 }
