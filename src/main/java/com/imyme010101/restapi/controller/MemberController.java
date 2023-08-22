@@ -125,7 +125,7 @@ public class MemberController {
         .build());
   }
 
-  @Operation(summary = "패스워드 분실 인증 토큰 생성")
+  @Operation(summary = "인증 번호 전송")
   @GetMapping("/verification/send/id")
   public ResponseEntity<ApiResponse> verificationSendId(
       @RequestParam("email") @Valid @Pattern(regexp = "^[a-z0-9]{4,}@([a-z0-9]{2,}\\.){1,}[a-z]{2,3}$", message = "example@domain.com") String email)
@@ -140,11 +140,11 @@ public class MemberController {
 
       if(ttl >= 0) {
         this.status = 200;
-        this.message = "이메일이 정상적으로 발송되었습니다.";
+        this.message = "인증코드가 정상적으로 발송되었습니다.";
         this.data = null;
       } else {
         this.status = 201;
-        this.message = "이메일이 비정상적으로 발송되었습니다.";
+        this.message = "인증코드가 비정상적으로 발송되었습니다.";
         this.data = null;
       }
     }
