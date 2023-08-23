@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imyme010101.restapi.repository.ProductRepository">
+	<insert id="add" parameterType="ProductDTO">
+		INSERT INTO member (id, password, roles, name, date_of_birth, phone_number, email, zip_code, address, gender, status)
+		VALUES (#{id}, #{password}, #{roles}, #{name}, #{dateOfBirth}, #{phoneNumber}, #{email}, #{zipCode}, #{address}, #{gender}, #{status})
+	</insert>
+
+	<select id="findAll" parameterType="hashMap" resultType="CartDTO">
+		SELECT * FROM member WHERE ${key} = #{val}
+	</select>	
+
+	<select id="findOne" parameterType="hashMap">
+		SELECT ${key} FROM member WHERE ${key} = #{val}
+	</select>	
+</mapper>
