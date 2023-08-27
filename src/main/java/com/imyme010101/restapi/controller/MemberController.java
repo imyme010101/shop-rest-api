@@ -50,7 +50,7 @@ public class MemberController {
 
   @Operation(summary = "회원 가입", description = "member 테이블 추가, 회원가입")
   @PutMapping("/register")
-  public ResponseEntity<ApiResponse> signup(@ParameterObject @Valid MemberDTO memberDTO) throws Exception {
+  public ResponseEntity<ApiResponse> up(@ParameterObject @Valid MemberDTO memberDTO) throws Exception {
     memberDTO.setPassword(EncryptionUtil.encrypt(memberDTO.getPassword()));
 
     if (memberService.add(memberDTO)) {
@@ -72,7 +72,7 @@ public class MemberController {
 
   @Operation(summary = "로그인 토큰 발급", description = "모든 API 호출을 하기 위해서 토큰은 발급")
   @GetMapping("/auth")
-  public ResponseEntity<ApiResponse> auth(@ParameterObject @Valid LoginDTO loginDTO) throws Exception {
+  public ResponseEntity<ApiResponse> in(@ParameterObject @Valid LoginDTO loginDTO) throws Exception {
     TokenDTO tokenDTO = jwtMemberService.auth(loginDTO.getId(), EncryptionUtil.encrypt(loginDTO.getPassword()));
 
     return ResponseEntity.badRequest().body(ApiResponse.builder()

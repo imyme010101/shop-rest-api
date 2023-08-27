@@ -7,11 +7,10 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.imyme010101.restapi.DTO.member.MemberDTO;
+import com.imyme010101.restapi.DTO.shop.CartDTO;
 
 @Repository
 @Mapper
 public interface CartRepository {
-  public int add(MemberDTO memberDTO);
-  public MemberDTO findAll(@Param("key") String key, @Param("val") String val);
-  public String findOne(@Param("key") String key, @Param("val") String val);
+  public int add(CartDTO cartDTO);
 }
